@@ -12,6 +12,8 @@
   --hover-highlight: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
   --table-border: rgba(12, 42, 55, 0.12);
   --table-divider: rgba(12, 42, 55, 0.06);
+  --badge-bg: rgba(58, 160, 164, 0.16);
+  --badge-border: rgba(58, 160, 164, 0.32);
   font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -53,6 +55,101 @@ main {
   padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 4vw, 3.5rem);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
   overflow: hidden;
+}
+
+.phpinfo-intro {
+  width: min(100%, 680px);
+  margin: 0 auto clamp(2rem, 4vw, 3rem);
+  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.85rem);
+  border-radius: 28px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  background: rgba(255, 255, 255, 0.88);
+  box-shadow: 0 24px 64px -42px rgba(10, 64, 102, 0.45);
+  backdrop-filter: blur(18px) saturate(140%);
+  display: grid;
+  gap: clamp(1.5rem, 3vw, 2.5rem);
+  justify-items: center;
+  text-align: center;
+}
+
+.phpinfo-intro__brand,
+.phpinfo-intro__zend {
+  display: grid;
+  gap: clamp(0.9rem, 2vw, 1.4rem);
+  justify-items: center;
+}
+
+.phpinfo-intro__badges {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.phpinfo-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 1.25rem;
+  border-radius: 999px;
+  background: var(--badge-bg);
+  border: 1px solid var(--badge-border);
+  color: var(--accent);
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 14px 38px -28px rgba(10, 64, 102, 0.4);
+}
+
+.phpinfo-logo {
+  display: grid;
+  place-items: center;
+  position: relative;
+  isolation: isolate;
+}
+
+.phpinfo-logo--php {
+  width: clamp(140px, 26vw, 210px);
+  height: clamp(82px, 15vw, 120px);
+  border-radius: 52% / 65%;
+  background: radial-gradient(120% 140% at 18% 20%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #b7c2ff 0%, #5661ad 38%, #393f7d 100%);
+  box-shadow: 0 28px 64px -40px rgba(10, 64, 102, 0.55), inset 0 0 12px rgba(255, 255, 255, 0.25);
+}
+
+.phpinfo-logo--php::after {
+  content: 'php';
+  font-size: clamp(2.15rem, 6vw, 2.9rem);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: lowercase;
+  color: #f9f9ff;
+}
+
+.phpinfo-logo--zend {
+  width: clamp(200px, 40vw, 280px);
+  min-height: clamp(58px, 12vw, 86px);
+  padding: clamp(0.45rem, 2vw, 0.85rem) clamp(1rem, 4vw, 1.75rem);
+  border-radius: 22px;
+  background: linear-gradient(135deg, rgba(208, 242, 255, 0.92), rgba(206, 251, 232, 0.92));
+  border: 1px solid rgba(58, 160, 164, 0.32);
+  box-shadow: 0 26px 58px -38px rgba(10, 64, 102, 0.5), inset 0 0 12px rgba(255, 255, 255, 0.4);
+}
+
+.phpinfo-logo--zend::after {
+  content: 'zend engine';
+  font-size: clamp(1.15rem, 3.4vw, 1.55rem);
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: lowercase;
+  color: #0a748f;
+}
+
+.phpinfo-intro__zend-text {
+  margin: 0;
+  max-width: 52ch;
+  color: var(--text-secondary);
+  line-height: 1.55;
 }
 
 .phpinfo-modern::before {
@@ -128,29 +225,6 @@ main {
   color: var(--accent);
 }
 
-.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type {
-  margin: 0 auto 2rem;
-  max-width: clamp(360px, 70%, 520px);
-  text-align: center;
-}
-
-.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td {
-  text-align: center;
-}
-
-.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td h1,
-.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td h2 {
-  font-size: clamp(1.5rem, 3vw, 2.25rem);
-  margin: 0.75rem 0 0;
-}
-
-.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type img {
-  display: block;
-  margin: 0 auto 1rem;
-  max-width: clamp(80px, 18vw, 120px);
-  height: auto;
-}
-
 .phpinfo-modern table tbody tr:last-child td {
   border-bottom: none;
 }
@@ -215,6 +289,15 @@ main {
 @media (max-width: 768px) {
   body {
     padding: clamp(1.5rem, 6vw, 3rem);
+  }
+
+  .phpinfo-intro {
+    width: 100%;
+    padding: clamp(1.35rem, 6vw, 2.2rem) clamp(1.25rem, 6vw, 2rem);
+  }
+
+  .phpinfo-badge {
+    font-size: 0.88rem;
   }
 
   .phpinfo-modern {

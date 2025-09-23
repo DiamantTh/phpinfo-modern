@@ -2,6 +2,35 @@
 declare(strict_types=1);
 
 /**
+ * Compose a custom intro card for the first phpinfo section.
+ */
+function renderPhpInfoIntro(): string
+{
+    $phpVersion = htmlspecialchars(PHP_VERSION, ENT_QUOTES);
+    $zendVersion = htmlspecialchars(zend_version(), ENT_QUOTES);
+    $zendCopy = sprintf(
+        'Dieses Programm verwendet die Zend Scripting Language Engine (Zend Engine %s, &copy; Zend Technologies).',
+        $zendVersion
+    );
+
+    return <<<HTML
+<div class="phpinfo-intro">
+  <div class="phpinfo-intro__brand">
+    <div class="phpinfo-logo phpinfo-logo--php" role="img" aria-label="PHP"></div>
+    <div class="phpinfo-intro__badges">
+      <span class="phpinfo-badge">PHP {$phpVersion}</span>
+      <span class="phpinfo-badge">Zend Engine {$zendVersion}</span>
+    </div>
+  </div>
+  <div class="phpinfo-intro__zend">
+    <div class="phpinfo-logo phpinfo-logo--zend" role="img" aria-label="Zend Engine"></div>
+    <p class="phpinfo-intro__zend-text">{$zendCopy}</p>
+  </div>
+</div>
+HTML;
+}
+
+/**
  * Capture the html body output from phpinfo() and massage it into
  * a structure that we can style consistently.
  */
@@ -18,6 +47,14 @@ function buildPhpInfoMarkup(): string
     // Remove default phpinfo styles/scripts to avoid clashes with our theme.
     $phpinfo = (string) preg_replace('%<style\b[^>]*>.*?</style>%is', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<script\b[^>]*>.*?</script>%is', '', $phpinfo);
+
+    // Remove built-in logos and messaging; we re-create them with custom markup.
+    $phpinfo = (string) preg_replace('%<a\s+href="https?://www\.php\.net/"[^>]*>.*?</a>%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%<a\s+href="https?://www\.zend\.com/"[^>]*>.*?</a>%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%<img[^>]+php-logo[^>]*>%i', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%<img[^>]+zend-logo[^>]*>%i', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%<h1[^>]*>phpinfo\(\)</h1>%i', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%This program makes use of the Zend Scripting Language Engine:.*?(?=<h2|<table|</?div|<br|$)%is', '', $phpinfo);
 
     if (preg_match('%<body[^>]*>(?<body>.*)</body>%is', $phpinfo, $matches)) {
         $phpinfo = $matches['body'];
@@ -46,6 +83,10 @@ function buildPhpInfoMarkup(): string
             '<section class="phpinfo-section" id="%s">',
             htmlspecialchars($slug, ENT_QUOTES)
         );
+
+        if ($sectionIndex === 1) {
+            $rendered .= renderPhpInfoIntro();
+        }
 
         if ($title !== null && $title !== '') {
             $rendered .= sprintf(
