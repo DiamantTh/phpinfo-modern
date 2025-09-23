@@ -218,8 +218,6 @@ main {
   border-bottom: 1px solid var(--table-divider);
   vertical-align: top;
   font-size: 0.95rem;
-  overflow-wrap: anywhere;
-  word-break: break-word;
 }
 
 .phpinfo-modern table th {
@@ -228,6 +226,18 @@ main {
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.78rem;
+}
+
+.phpinfo-modern table td {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.phpinfo-modern table td:first-child {
+  overflow-wrap: normal;
+  word-break: normal;
+  white-space: nowrap;
+  min-width: clamp(160px, 24%, 240px);
 }
 
 .phpinfo-modern table tbody tr {
@@ -395,6 +405,13 @@ main {
     padding: 0;
     border-bottom: none;
     font-size: 0.9rem;
+  }
+
+  .phpinfo-modern table td:first-child {
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
+    min-width: 0;
   }
 
   .phpinfo-modern table tbody td {

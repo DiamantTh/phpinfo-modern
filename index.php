@@ -49,9 +49,15 @@ function renderZendPanel(?string $zendLogoData, ?string $zendBlurb): ?string
     $message = '';
     if ($zendBlurb !== null && trim($zendBlurb) !== '') {
         $normalized = preg_replace('%<br\s*/?>%i', "\n", $zendBlurb);
+        $normalized = strip_tags($normalized);
         $normalized = html_entity_decode((string) $normalized, ENT_QUOTES | ENT_HTML5);
-        $normalized = htmlspecialchars(trim($normalized), ENT_QUOTES);
-        $message = '<p class="phpinfo-zend__text">' . nl2br($normalized) . '</p>';
+        $normalized = preg_replace('/[ \t]*\n[ \t]*/', "\n", $normalized);
+        $normalized = preg_replace("/\n{3,}/", "\n\n", $normalized);
+        $normalized = trim($normalized);
+
+        if ($normalized !== '') {
+            $message = '<p class="phpinfo-zend__text">' . nl2br(htmlspecialchars($normalized, ENT_QUOTES)) . '</p>';
+        }
     }
 
     return <<<HTML
@@ -87,7 +93,7 @@ function buildPhpInfoMarkup(): string
     }
 
     $zendBlurb = null;
-    if (preg_match('%This program makes use of the Zend Scripting Language Engine:(?<text>.*?)(?=<h2|<table|</?div|\Z)%is', $phpinfo, $zendBlurbMatch)) {
+    if (preg_match('%This program makes use of the Zend Scripting Language Engine:(?<text>.*?)(?=<h2|<table|</table|<hr|</?div|\Z)%is', $phpinfo, $zendBlurbMatch)) {
         $zendBlurb = trim($zendBlurbMatch['text']);
     }
 
@@ -96,12 +102,40 @@ function buildPhpInfoMarkup(): string
     $phpinfo = (string) preg_replace('%<script\b[^>]*>.*?</script>%is', '', $phpinfo);
 
     // Remove built-in logos and messaging; we re-create them with custom markup.
-    $phpinfo = (string) preg_replace('%<a\s+href="https?://www\.php\.net/"[^>]*>.*?</a>%is', '', $phpinfo);
-    $phpinfo = (string) preg_replace('%<a\s+href="https?://www\.zend\.com/"[^>]*>.*?</a>%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace_callback(
+        '%(?P<leading>\s*)<tr(?P<attrs>[^>]*)>(?P<row>.*?)</tr>%is',
+        static function (array $matches): string {
+            $row = $matches['row'];
+
+            $hasPhpNet = preg_match('%<a\s+href="https?://www\.php\.net/%i', $row) === 1;
+            $hasZend = preg_match('%<a\s+href="https?://www\.zend\.com/%i', $row) === 1;
+
+            if (!$hasPhpNet && !$hasZend) {
+                return $matches[0];
+            }
+
+            $rowWithoutLinks = preg_replace('%<a\b[^>]*>(.*?)</a>%is', '$1', $row);
+            if ($rowWithoutLinks === null) {
+                return $matches['leading'];
+            }
+
+            $rowWithoutLinks = preg_replace('%<img\b[^>]*>%i', '', $rowWithoutLinks);
+            if ($rowWithoutLinks === null) {
+                return $matches['leading'];
+            }
+
+            if (trim(strip_tags($rowWithoutLinks)) === '') {
+                return $matches['leading'];
+            }
+
+            return $matches['leading'] . '<tr' . $matches['attrs'] . '>' . $rowWithoutLinks . '</tr>';
+        },
+        $phpinfo
+    );
     $phpinfo = (string) preg_replace('%<img[^>]+php-logo[^>]*>%i', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<img[^>]+zend-logo[^>]*>%i', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<h1[^>]*>phpinfo\(\)</h1>%i', '', $phpinfo);
-    $phpinfo = (string) preg_replace('%This program makes use of the Zend Scripting Language Engine:.*?(?=<h2|<table|</?div|\Z)%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%This program makes use of the Zend Scripting Language Engine:.*?(?=<h2|<table|</table|<hr|</?div|\Z)%is', '', $phpinfo);
 
     if (preg_match('%<body[^>]*>(?<body>.*)</body>%is', $phpinfo, $matches)) {
         $phpinfo = $matches['body'];
