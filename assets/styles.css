@@ -1,23 +1,6 @@
-:root {
-  --bg-start: #d9edff;
-  --bg-mid: #c9f0f5;
-  --bg-end: #c5f8d8;
-  --card-bg: rgba(255, 255, 255, 0.72);
-  --card-border: rgba(255, 255, 255, 0.6);
-  --card-shadow: rgba(0, 45, 85, 0.2);
-  --text-primary: #0c2a37;
-  --text-secondary: rgba(12, 42, 55, 0.7);
-  --accent: #3aa0a4;
-  --accent-soft: rgba(58, 160, 164, 0.12);
-  --hover-highlight: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
-  --table-border: rgba(12, 42, 55, 0.12);
-  --table-divider: rgba(12, 42, 55, 0.06);
-  --badge-bg: rgba(58, 160, 164, 0.16);
-  --badge-border: rgba(58, 160, 164, 0.32);
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
-}
-
-* {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -25,50 +8,113 @@ html,
 body {
   margin: 0;
   min-height: 100%;
-  color: var(--text-primary);
-  text-rendering: optimizeLegibility;
-  background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-mid) 40%, var(--bg-end) 100%);
+  color: #0c2a37;
+  background: linear-gradient(
+    180deg,
+    #d9edff 0%,
+    #c9f0f5 40%,
+    #c5f8d8 100%
+  );
 }
 
 body {
+  font-family: "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+  line-height: 1.6;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: clamp(2rem, 4vw, 4rem) clamp(1.5rem, 5vw, 6rem);
+  text-rendering: optimizeLegibility;
 }
 
 main {
   position: relative;
   width: min(1100px, 100%);
-  background: var(--card-bg);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   border-radius: 28px;
-  border: 1px solid var(--card-border);
-  box-shadow: 0 24px 80px -40px var(--card-shadow), 0 12px 40px -24px rgba(10, 64, 102, 0.18);
+  box-shadow:
+    0 24px 80px -40px rgba(0, 45, 85, 0.2),
+    0 12px 40px -24px rgba(10, 64, 102, 0.18);
   backdrop-filter: blur(14px) saturate(140%);
-  overflow: hidden;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
+  overflow: visible;
 }
 
 .phpinfo-modern {
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.4);
-  padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 4vw, 3.5rem);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
-  overflow: hidden;
+  border-radius: 22px;
+  background: transparent;
+  overflow: visible;
 }
 
+.phpinfo-modern__surface {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
+  z-index: 0;
+}
+
+.phpinfo-modern__surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    280px 280px at var(--pointer-x, 50%) var(--pointer-y, 50%),
+    rgba(255, 255, 255, 0.6),
+    transparent 70%
+  );
+  opacity: var(--pointer-opacity, 0);
+  transition: opacity 240ms ease;
+  mix-blend-mode: screen;
+}
+
+.phpinfo-modern[data-pointer-active="true"] .phpinfo-modern__surface::before {
+  opacity: 0.6;
+}
+
+.phpinfo-modern__content {
+  position: relative;
+  z-index: 1;
+  padding: clamp(1.6rem, 3vw, 2.6rem) clamp(1.6rem, 3vw, 3.2rem) clamp(2.5rem, 4vw, 3.5rem);
+}
+
+.phpinfo-section {
+  position: relative;
+}
+
+.section-title {
+  position: sticky;
+  top: clamp(1rem, 3vw, 1.6rem);
+  margin: clamp(2.5rem, 4vw, 3.5rem) 0 1.5rem;
+  padding: 0.6rem 1rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(247, 255, 253, 0.6));
+  box-shadow: 0 12px 24px -18px rgba(12, 42, 55, 0.3);
+  font-size: 1.4rem;
+  font-weight: 600;
+  z-index: 2;
+}
+
+.section-title.is-visible {
+  box-shadow: 0 18px 36px -24px rgba(12, 42, 55, 0.38);
+}
 
 .phpinfo-intro {
   width: min(100%, 680px);
   margin: 0 auto clamp(2rem, 4vw, 3rem);
-  padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.85rem);
+  padding: clamp(1.75rem, 4vw, 2.8rem) clamp(1.75rem, 4vw, 2.85rem);
   border-radius: 28px;
   border: 1px solid rgba(255, 255, 255, 0.7);
   background: rgba(255, 255, 255, 0.88);
   box-shadow: 0 24px 64px -42px rgba(10, 64, 102, 0.45);
   backdrop-filter: blur(18px) saturate(140%);
   display: grid;
-  gap: clamp(1.5rem, 3vw, 2rem);
+  gap: clamp(1.4rem, 3vw, 2rem);
   justify-items: center;
   text-align: center;
 }
@@ -92,30 +138,33 @@ main {
   gap: 0.4rem;
   padding: 0.4rem 1.25rem;
   border-radius: 999px;
-  background: var(--badge-bg);
-  border: 1px solid var(--badge-border);
-  color: var(--accent);
-  font-weight: 600;
+  background: rgba(58, 160, 164, 0.12);
+  border: 1px solid rgba(58, 160, 164, 0.32);
+  color: #3aa0a4;
   font-size: 0.95rem;
+  font-weight: 600;
   letter-spacing: 0.04em;
   box-shadow: 0 14px 38px -28px rgba(10, 64, 102, 0.4);
 }
 
 .phpinfo-logo {
-  display: grid;
-  place-items: center;
   position: relative;
   isolation: isolate;
+  display: grid;
+  place-items: center;
 }
 
 .phpinfo-logo--php {
   width: clamp(140px, 26vw, 210px);
   height: clamp(82px, 15vw, 120px);
-  border-radius: 52% / 65%;
-  background: radial-gradient(120% 140% at 18% 20%, rgba(255, 255, 255, 0.45), transparent 55%),
-    linear-gradient(135deg, #b7c2ff 0%, #5661ad 38%, #393f7d 100%);
-  box-shadow: 0 28px 64px -40px rgba(10, 64, 102, 0.55), inset 0 0 12px rgba(255, 255, 255, 0.25);
   padding: clamp(0.35rem, 1.5vw, 0.65rem);
+  border-radius: 52% / 65%;
+  background:
+    radial-gradient(120% 140% at 18% 20%, rgba(255, 255, 255, 0.45), transparent 55%),
+    linear-gradient(135deg, #b7c2ff 0%, #5661ad 38%, #393f7d 100%);
+  box-shadow:
+    0 28px 64px -40px rgba(10, 64, 102, 0.55),
+    inset 0 0 12px rgba(255, 255, 255, 0.25);
 }
 
 .phpinfo-logo--php[data-has-image="true"] {
@@ -160,27 +209,8 @@ main {
 
 .phpinfo-zend__text {
   margin: 0;
-  color: var(--text-secondary);
+  color: rgba(12, 42, 55, 0.7);
   line-height: 1.55;
-}
-
-.phpinfo-modern::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(
-      280px 280px at var(--pointer-x, 50%) var(--pointer-y, 50%),
-      rgba(255, 255, 255, 0.6),
-      transparent 70%
-    );
-  opacity: var(--pointer-opacity, 0);
-  transition: opacity 240ms ease;
-  pointer-events: none;
-  mix-blend-mode: screen;
-}
-
-.phpinfo-modern[data-pointer-active="true"]::before {
-  opacity: 0.6;
 }
 
 .phpinfo-modern table {
@@ -188,10 +218,9 @@ main {
   border-collapse: collapse;
   margin: 1.5rem 0;
   background: rgba(255, 255, 255, 0.75);
-  border: 1px solid var(--table-border);
-  box-shadow: 0 18px 40px -32px rgba(12, 42, 55, 0.4);
+  border: 1px solid rgba(12, 42, 55, 0.12);
   border-radius: 18px;
-  overflow: hidden;
+  box-shadow: 0 18px 40px -32px rgba(12, 42, 55, 0.4);
 }
 
 .phpinfo-modern table caption {
@@ -200,7 +229,7 @@ main {
   padding: 1.25rem clamp(1.25rem, 2vw, 1.75rem) 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--accent);
+  color: #3aa0a4;
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -208,17 +237,26 @@ main {
 .phpinfo-modern table th,
 .phpinfo-modern table td {
   padding: 0.85rem clamp(1rem, 2vw, 1.5rem);
-  border-bottom: 1px solid var(--table-divider);
+  border-bottom: 1px solid rgba(12, 42, 55, 0.06);
   vertical-align: top;
   font-size: 0.95rem;
 }
 
 .phpinfo-modern table th {
-  color: var(--accent);
+  color: #3aa0a4;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   font-size: 0.78rem;
+}
+
+.phpinfo-modern table tbody td {
+  color: rgba(12, 42, 55, 0.7);
+}
+
+.phpinfo-modern table tbody td:first-child {
+  color: #0c2a37;
+  font-weight: 600;
 }
 
 .phpinfo-modern table tbody tr {
@@ -227,49 +265,26 @@ main {
 
 .phpinfo-modern table tbody tr.is-hovered,
 .phpinfo-modern table tbody tr:hover {
-  background: var(--hover-highlight);
+  background: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
   transform: translate3d(0, -1px, 0);
   box-shadow: 0 12px 32px -24px rgba(12, 42, 55, 0.45);
 }
 
 .phpinfo-modern table tbody tr.is-hovered td:first-child,
 .phpinfo-modern table tbody tr:hover td:first-child {
-  color: var(--accent);
+  color: #3aa0a4;
 }
 
 .phpinfo-modern table tbody tr:last-child td {
   border-bottom: none;
 }
 
-.phpinfo-modern table tbody td {
-  color: var(--text-secondary);
-}
-
-.phpinfo-modern table tbody td:first-child {
-  color: var(--text-primary);
-  font-weight: 600;
-}
-
 .phpinfo-modern pre,
 .phpinfo-modern code {
-  font-family: 'SFMono-Regular', 'Menlo', 'DejaVu Sans Mono', 'Consolas', monospace;
+  font-family: "SFMono-Regular", "Menlo", "DejaVu Sans Mono", "Consolas", monospace;
   background: rgba(10, 64, 102, 0.06);
   border-radius: 10px;
   padding: 0.4rem 0.6rem;
-}
-
-.phpinfo-modern .section-title {
-  position: sticky;
-  top: clamp(1rem, 3vw, 1.5rem);
-  margin: clamp(2.5rem, 4vw, 3.5rem) 0 1.5rem;
-  font-size: 1.4rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(247, 255, 253, 0.6));
-  padding: 0.6rem 1rem;
-  border-radius: 12px;
-  box-shadow: 0 12px 24px -18px rgba(12, 42, 55, 0.3);
-  z-index: 2;
 }
 
 .phpinfo-modern details {
@@ -287,15 +302,15 @@ main {
 
 .phpinfo-modern summary {
   cursor: pointer;
-  font-weight: 600;
-  color: var(--accent);
   display: flex;
   align-items: center;
   gap: 0.6rem;
+  font-weight: 600;
+  color: #3aa0a4;
 }
 
 .phpinfo-modern summary::marker {
-  color: var(--accent);
+  color: #3aa0a4;
 }
 
 @media (max-width: 768px) {
@@ -317,7 +332,7 @@ main {
     padding: clamp(1.1rem, 5vw, 1.8rem) clamp(1rem, 6vw, 2rem);
   }
 
-  .phpinfo-modern {
+  .phpinfo-modern__content {
     padding: clamp(1.25rem, 6vw, 2rem);
   }
 
@@ -333,7 +348,7 @@ main {
 }
 
 @media (max-width: 600px) {
-  .phpinfo-modern {
+  .phpinfo-modern__content {
     padding: clamp(1rem, 8vw, 1.5rem);
   }
 
@@ -379,12 +394,12 @@ main {
 
   .phpinfo-modern table tbody td {
     display: block;
-    color: var(--text-secondary);
+    color: rgba(12, 42, 55, 0.7);
     line-height: 1.45;
   }
 
   .phpinfo-modern table tbody td:first-child {
-    color: var(--accent);
+    color: #3aa0a4;
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 0.08em;
@@ -409,10 +424,12 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.001ms !important;
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
 }

@@ -203,7 +203,10 @@ $phpinfoMarkup = buildPhpInfoMarkup();
   <body>
     <main>
       <div class="phpinfo-modern" data-phpinfo-root>
-        <?= $phpinfoMarkup ?>
+        <div class="phpinfo-modern__surface" aria-hidden="true"></div>
+        <div class="phpinfo-modern__content">
+          <?= $phpinfoMarkup ?>
+        </div>
       </div>
     </main>
   </body>
