@@ -45,7 +45,7 @@ main {
   border: 1px solid var(--card-border);
   box-shadow: 0 24px 80px -40px var(--card-shadow), 0 12px 40px -24px rgba(10, 64, 102, 0.18);
   backdrop-filter: blur(14px) saturate(140%);
-  overflow: hidden;
+  overflow: visible;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
 }
 
@@ -54,7 +54,8 @@ main {
   border-top: 1px solid rgba(255, 255, 255, 0.4);
   padding: clamp(1.5rem, 3vw, 2.5rem) clamp(1.5rem, 3vw, 3rem) clamp(2.5rem, 4vw, 3.5rem);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 
@@ -211,6 +212,8 @@ main {
   border-bottom: 1px solid var(--table-divider);
   vertical-align: top;
   font-size: 0.95rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
 }
 
 .phpinfo-modern table th {
@@ -256,6 +259,13 @@ main {
   background: rgba(10, 64, 102, 0.06);
   border-radius: 10px;
   padding: 0.4rem 0.6rem;
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+.phpinfo-modern pre {
+  overflow-x: auto;
+  white-space: pre-wrap;
 }
 
 .phpinfo-modern .section-title {
