@@ -364,6 +364,10 @@ main {
     display: none;
   }
 
+  .phpinfo-modern table tbody tr:has(th) {
+    display: none;
+  }
+
   .phpinfo-modern table tbody {
     display: grid;
     gap: clamp(0.75rem, 5vw, 1.1rem);
