@@ -45,19 +45,22 @@ main {
   border: 1px solid var(--card-border);
   box-shadow: 0 24px 80px -40px var(--card-shadow), 0 12px 40px -24px rgba(10, 64, 102, 0.18);
   backdrop-filter: blur(14px) saturate(140%);
+  overflow: visible;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
 }
 
 .phpinfo-modern {
   position: relative;
   border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 22px;
   background: transparent;
+  overflow: visible;
 }
 
 .phpinfo-modern__surface {
   position: absolute;
   inset: 0;
-  border-radius: 22px;
+  border-radius: inherit;
   background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
   overflow: hidden;
   pointer-events: none;
