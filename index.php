@@ -1,0 +1,109 @@
+<?php
+declare(strict_types=1);
+
+/**
+ * Capture the html body output from phpinfo() and massage it into
+ * a structure that we can style consistently.
+ */
+function buildPhpInfoMarkup(): string
+{
+    ob_start();
+    phpinfo();
+    $phpinfo = ob_get_clean();
+
+    if ($phpinfo === false) {
+        return '<p class="phpinfo-error">Die phpinfo-Ausgabe konnte nicht geladen werden.</p>';
+    }
+
+    // Remove default phpinfo styles/scripts to avoid clashes with our theme.
+    $phpinfo = (string) preg_replace('%<style\b[^>]*>.*?</style>%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%<script\b[^>]*>.*?</script>%is', '', $phpinfo);
+
+    if (preg_match('%<body[^>]*>(?<body>.*)</body>%is', $phpinfo, $matches)) {
+        $phpinfo = $matches['body'];
+    }
+
+    // Collapse duplicated whitespace and cleanup helper containers.
+    $phpinfo = (string) preg_replace('%<div class="center">(.*?)</div>%is', '$1', $phpinfo);
+    $phpinfo = (string) preg_replace('%<hr />%i', '', $phpinfo);
+
+    $parts = preg_split('%(<h2[^>]*>.*?</h2>)%is', $phpinfo, -1, PREG_SPLIT_DELIM_CAPTURE | PREG_SPLIT_NO_EMPTY);
+    if ($parts === false) {
+        return $phpinfo;
+    }
+
+    $rendered = '';
+    $sectionOpen = false;
+    $sectionIndex = 0;
+
+    foreach ($parts as $part) {
+        if (preg_match('%<h2[^>]*>(.*?)</h2>%is', $part, $headingMatch)) {
+            if ($sectionOpen) {
+                $rendered .= '</section>';
+            }
+
+            $sectionTitle = trim(strip_tags($headingMatch[1]));
+            $slug = 'phpinfo-section-' . ++$sectionIndex;
+            $rendered .= sprintf(
+                '<section class="phpinfo-section" id="%s"><h2 class="section-title">%s</h2>',
+                htmlspecialchars($slug, ENT_QUOTES),
+                htmlspecialchars($sectionTitle, ENT_QUOTES)
+            );
+
+            $sectionOpen = true;
+            continue;
+        }
+
+        if (!trim($part)) {
+            continue;
+        }
+
+        if (!$sectionOpen) {
+            $slug = 'phpinfo-section-' . ++$sectionIndex;
+            $rendered .= sprintf(
+                '<section class="phpinfo-section" id="%s"><h2 class="section-title">%s</h2>',
+                htmlspecialchars($slug, ENT_QUOTES),
+                htmlspecialchars('Allgemein', ENT_QUOTES)
+            );
+            $sectionOpen = true;
+        }
+
+        $rendered .= $part;
+    }
+
+    if ($sectionOpen) {
+        $rendered .= '</section>';
+    }
+
+    return $rendered;
+}
+
+$phpinfoMarkup = buildPhpInfoMarkup();
+?>
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Modernes phpinfo()</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="assets/styles.css" />
+    <script type="module" src="assets/app.js" defer></script>
+  </head>
+  <body>
+    <main>
+      <header class="hero">
+        <span class="hero__eyebrow">Server Diagnostics</span>
+        <h1 class="hero__title">Modernes phpinfo</h1>
+        <p class="hero__subtitle">
+          Ein frischer Blick auf Ihre aktuelle PHP-Konfiguration. Schweben Sie über die Einträge, um Details hervorzuheben, und entdecken Sie die wichtigsten Serverinformationen in einem ruhigen Farbverlauf von Ozeanblau bis Smaragdgrün.
+        </p>
+      </header>
+      <div class="phpinfo-modern" data-phpinfo-root>
+        <?= $phpinfoMarkup ?>
+      </div>
+    </main>
+  </body>
+</html>
