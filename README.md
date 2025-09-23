@@ -12,6 +12,9 @@ A refreshed presentation for the built-in `phpinfo()` output with a calming blue
 1. Serve the directory with PHP, e.g. `php -S localhost:8000`.
 2. Visit `http://localhost:8000/index.php` to inspect your environment.
 
+### Transparency
+This interface was prototyped with assistance from AI tooling (OpenAI ChatGPT/Codex). All generated code and copy was reviewed and adapted before inclusion.
+
 ---
 
 ## Überblick (Deutsch)
@@ -25,6 +28,9 @@ Eine erneuerte Darstellung der PHP-Funktion `phpinfo()` mit sanftem Farbverlauf 
 ### Schnellstart
 1. Projektordner mit PHP starten, z. B. `php -S localhost:8000`.
 2. `http://localhost:8000/index.php` aufrufen, um Ihre Konfiguration zu prüfen.
+
+### Transparenz
+Dieses Interface entstand mit Unterstützung von KI-Werkzeugen (OpenAI ChatGPT/Codex). Sämtlicher generierter Code und Text wurde vor der Übernahme geprüft und angepasst.
 
 ## License
 Distributed under the terms of the GNU Affero General Public License v3.0. See `LICENSE` for details.

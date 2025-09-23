@@ -4,28 +4,60 @@ declare(strict_types=1);
 /**
  * Compose a custom intro card for the first phpinfo section.
  */
-function renderPhpInfoIntro(): string
+function renderPhpInfoIntro(?string $phpLogoData, string $phpVersion, string $zendVersion): string
 {
-    $phpVersion = htmlspecialchars(PHP_VERSION, ENT_QUOTES);
-    $zendVersion = htmlspecialchars(zend_version(), ENT_QUOTES);
-    $zendCopy = sprintf(
-        'Dieses Programm verwendet die Zend Scripting Language Engine (Zend Engine %s, &copy; Zend Technologies).',
-        $zendVersion
+    $phpVersion = htmlspecialchars($phpVersion, ENT_QUOTES);
+    $zendVersion = htmlspecialchars($zendVersion, ENT_QUOTES);
+
+    $phpLogo = $phpLogoData !== null
+        ? sprintf(
+            '<img src="%s" alt="PHP Logo" class="phpinfo-logo__image" />',
+            htmlspecialchars($phpLogoData, ENT_QUOTES)
+        )
+        : '<span class="phpinfo-logo__placeholder">php</span>';
+
+    $logoWrapper = sprintf(
+        '<div class="phpinfo-logo phpinfo-logo--php" data-has-image="%s">%s</div>',
+        $phpLogoData !== null ? 'true' : 'false',
+        $phpLogo
     );
 
+    return sprintf(
+        '<div class="phpinfo-intro"><div class="phpinfo-intro__brand">%s<div class="phpinfo-intro__badges"><span class="phpinfo-badge">PHP %s</span><span class="phpinfo-badge">Zend Engine %s</span></div></div></div>',
+        $logoWrapper,
+        $phpVersion,
+        $zendVersion
+    );
+}
+
+/**
+ * Render the Zend engine details card using the original logo/text if available.
+ */
+function renderZendPanel(?string $zendLogoData, ?string $zendBlurb): ?string
+{
+    if ($zendLogoData === null && ($zendBlurb === null || trim($zendBlurb) === '')) {
+        return null;
+    }
+
+    $logo = $zendLogoData !== null
+        ? sprintf(
+            '<img src="%s" alt="Zend Engine Logo" class="phpinfo-zend__logo" />',
+            htmlspecialchars($zendLogoData, ENT_QUOTES)
+        )
+        : '';
+
+    $message = '';
+    if ($zendBlurb !== null && trim($zendBlurb) !== '') {
+        $normalized = preg_replace('%<br\s*/?>%i', "\n", $zendBlurb);
+        $normalized = html_entity_decode((string) $normalized, ENT_QUOTES | ENT_HTML5);
+        $normalized = htmlspecialchars(trim($normalized), ENT_QUOTES);
+        $message = '<p class="phpinfo-zend__text">' . nl2br($normalized) . '</p>';
+    }
+
     return <<<HTML
-<div class="phpinfo-intro">
-  <div class="phpinfo-intro__brand">
-    <div class="phpinfo-logo phpinfo-logo--php" role="img" aria-label="PHP"></div>
-    <div class="phpinfo-intro__badges">
-      <span class="phpinfo-badge">PHP {$phpVersion}</span>
-      <span class="phpinfo-badge">Zend Engine {$zendVersion}</span>
-    </div>
-  </div>
-  <div class="phpinfo-intro__zend">
-    <div class="phpinfo-logo phpinfo-logo--zend" role="img" aria-label="Zend Engine"></div>
-    <p class="phpinfo-intro__zend-text">{$zendCopy}</p>
-  </div>
+<div class="phpinfo-zend">
+  {$logo}
+  {$message}
 </div>
 HTML;
 }
@@ -44,6 +76,21 @@ function buildPhpInfoMarkup(): string
         return '<p class="phpinfo-error">Die phpinfo-Ausgabe konnte nicht geladen werden.</p>';
     }
 
+    $phpLogoData = null;
+    if (preg_match('%<img[^>]+alt="?PHP Logo"?[^>]*src="(?P<src>data:image/[^"\']+)"[^>]*>%i', $phpinfo, $phpLogoMatch)) {
+        $phpLogoData = $phpLogoMatch['src'];
+    }
+
+    $zendLogoData = null;
+    if (preg_match('%<img[^>]+alt="?Zend(?: Engine)? Logo"?[^>]*src="(?P<src>data:image/[^"\']+)"[^>]*>%i', $phpinfo, $zendLogoMatch)) {
+        $zendLogoData = $zendLogoMatch['src'];
+    }
+
+    $zendBlurb = null;
+    if (preg_match('%This program makes use of the Zend Scripting Language Engine:(?<text>.*?)(?=<h2|<table|</?div|\Z)%is', $phpinfo, $zendBlurbMatch)) {
+        $zendBlurb = trim($zendBlurbMatch['text']);
+    }
+
     // Remove default phpinfo styles/scripts to avoid clashes with our theme.
     $phpinfo = (string) preg_replace('%<style\b[^>]*>.*?</style>%is', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<script\b[^>]*>.*?</script>%is', '', $phpinfo);
@@ -54,7 +101,7 @@ function buildPhpInfoMarkup(): string
     $phpinfo = (string) preg_replace('%<img[^>]+php-logo[^>]*>%i', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<img[^>]+zend-logo[^>]*>%i', '', $phpinfo);
     $phpinfo = (string) preg_replace('%<h1[^>]*>phpinfo\(\)</h1>%i', '', $phpinfo);
-    $phpinfo = (string) preg_replace('%This program makes use of the Zend Scripting Language Engine:.*?(?=<h2|<table|</?div|<br|$)%is', '', $phpinfo);
+    $phpinfo = (string) preg_replace('%This program makes use of the Zend Scripting Language Engine:.*?(?=<h2|<table|</?div|\Z)%is', '', $phpinfo);
 
     if (preg_match('%<body[^>]*>(?<body>.*)</body>%is', $phpinfo, $matches)) {
         $phpinfo = $matches['body'];
@@ -73,8 +120,15 @@ function buildPhpInfoMarkup(): string
     $sectionOpen = false;
     $sectionIndex = 0;
 
-    $openSection = static function (?string $title) use (&$rendered, &$sectionOpen, &$sectionIndex): void {
+    $introMarkup = renderPhpInfoIntro($phpLogoData, PHP_VERSION, zend_version());
+    $zendPanel = renderZendPanel($zendLogoData, $zendBlurb);
+
+    $openSection = static function (?string $title) use (&$rendered, &$sectionOpen, &$sectionIndex, $introMarkup, &$zendPanel): void {
         if ($sectionOpen) {
+            if ($sectionIndex === 1 && $zendPanel !== null) {
+                $rendered .= $zendPanel;
+                $zendPanel = null;
+            }
             $rendered .= '</section>';
         }
 
@@ -85,7 +139,7 @@ function buildPhpInfoMarkup(): string
         );
 
         if ($sectionIndex === 1) {
-            $rendered .= renderPhpInfoIntro();
+            $rendered .= $introMarkup;
         }
 
         if ($title !== null && $title !== '') {
@@ -117,6 +171,10 @@ function buildPhpInfoMarkup(): string
     }
 
     if ($sectionOpen) {
+        if ($sectionIndex === 1 && $zendPanel !== null) {
+            $rendered .= $zendPanel;
+            $zendPanel = null;
+        }
         $rendered .= '</section>';
     }
 
