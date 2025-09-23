@@ -332,6 +332,82 @@ main {
   }
 }
 
+@media (max-width: 600px) {
+  .phpinfo-modern {
+    padding: clamp(1rem, 8vw, 1.5rem);
+  }
+
+  .phpinfo-modern table {
+    margin: 0;
+    background: transparent;
+    border: none;
+    box-shadow: none;
+  }
+
+  .phpinfo-modern table caption {
+    padding: 0 0 0.75rem;
+    font-size: 0.9rem;
+    letter-spacing: 0.08em;
+  }
+
+  .phpinfo-modern table thead {
+    display: none;
+  }
+
+  .phpinfo-modern table tbody {
+    display: grid;
+    gap: clamp(0.75rem, 5vw, 1.1rem);
+  }
+
+  .phpinfo-modern table tbody tr {
+    display: grid;
+    gap: 0.5rem;
+    background: rgba(255, 255, 255, 0.88);
+    border: 1px solid rgba(12, 42, 55, 0.08);
+    border-radius: 16px;
+    padding: clamp(0.85rem, 5vw, 1.2rem);
+    box-shadow: 0 6px 18px -14px rgba(12, 42, 55, 0.25);
+    transition: background 160ms ease;
+  }
+
+  .phpinfo-modern table th,
+  .phpinfo-modern table td {
+    padding: 0;
+    border-bottom: none;
+    font-size: 0.9rem;
+  }
+
+  .phpinfo-modern table tbody td {
+    display: block;
+    color: var(--text-secondary);
+    line-height: 1.45;
+  }
+
+  .phpinfo-modern table tbody td:first-child {
+    color: var(--accent);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 0.78rem;
+  }
+
+  .phpinfo-modern table tbody tr.is-hovered,
+  .phpinfo-modern table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 6px 18px -14px rgba(12, 42, 55, 0.25);
+    transform: none;
+  }
+
+  .phpinfo-modern details {
+    padding: 0.85rem 1.1rem;
+    box-shadow: none;
+  }
+
+  .phpinfo-modern details[open] {
+    box-shadow: none;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * {
     animation-duration: 0.001ms !important;
