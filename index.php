@@ -100,13 +100,6 @@ $phpinfoMarkup = buildPhpInfoMarkup();
   </head>
   <body>
     <main>
-      <header class="hero">
-        <span class="hero__eyebrow">Server Diagnostics</span>
-        <h1 class="hero__title">Modernes phpinfo</h1>
-        <p class="hero__subtitle">
-          Ein frischer Blick auf Ihre aktuelle PHP-Konfiguration. Schweben Sie über die Einträge, um Details hervorzuheben, und entdecken Sie die wichtigsten Serverinformationen in einem ruhigen Farbverlauf von Ozeanblau bis Smaragdgrün.
-        </p>
-      </header>
       <div class="phpinfo-modern" data-phpinfo-root>
         <?= $phpinfoMarkup ?>
       </div>
