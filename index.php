@@ -93,7 +93,7 @@ $phpinfoMarkup = buildPhpInfoMarkup();
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Modernes phpinfo" />
     <meta property="og:description" content="Ein frischer Blick auf Ihre aktuelle PHP-Konfiguration. Schweben Sie über die Einträge, um Details hervorzuheben, und entdecken Sie die wichtigsten Serverinformationen in einem ruhigen Farbverlauf von Ozeanblau bis Smaragdgrün." />
-    <title>Modernes phpinfo()</title>
+    <title>Modernes phpinfo</title>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/styles.css" />
     <script type="module" src="assets/app.js" defer></script>
