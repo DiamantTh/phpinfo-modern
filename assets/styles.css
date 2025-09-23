@@ -155,15 +155,46 @@ main {
   border: 1px solid rgba(58, 160, 164, 0.1);
   background: rgba(255, 255, 255, 0.82);
   box-shadow: 0 24px 54px -36px rgba(10, 64, 102, 0.4);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(1.1rem, 3vw, 1.8rem);
   text-align: center;
+}
+
+.phpinfo-zend__header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: clamp(0.75rem, 3vw, 1.2rem);
+}
+
+.phpinfo-zend__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.phpinfo-zend__brand {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .phpinfo-zend__logo {
   display: block;
-  margin: 0 auto clamp(0.6rem, 2vw, 1rem);
-  max-width: clamp(160px, 28vw, 220px);
+  width: clamp(140px, 22vw, 220px);
+  max-width: 100%;
   height: auto;
   filter: drop-shadow(0 12px 28px rgba(10, 64, 102, 0.25));
+}
+
+.phpinfo-zend__body {
+  width: 100%;
 }
 
 .phpinfo-zend__text {
@@ -233,7 +264,7 @@ main {
   word-break: break-word;
 }
 
-.phpinfo-modern table td:first-child {
+.phpinfo-modern table td:first-child:not(:last-child) {
   overflow-wrap: normal;
   word-break: normal;
   white-space: nowrap;
@@ -251,8 +282,8 @@ main {
   box-shadow: 0 12px 32px -24px rgba(12, 42, 55, 0.45);
 }
 
-.phpinfo-modern table tbody tr.is-hovered td:first-child,
-.phpinfo-modern table tbody tr:hover td:first-child {
+.phpinfo-modern table tbody tr.is-hovered td:first-child:not(:last-child),
+.phpinfo-modern table tbody tr:hover td:first-child:not(:last-child) {
   color: var(--accent);
 }
 
@@ -264,7 +295,7 @@ main {
   color: var(--text-secondary);
 }
 
-.phpinfo-modern table tbody td:first-child {
+.phpinfo-modern table tbody td:first-child:not(:last-child) {
   color: var(--text-primary);
   font-weight: 600;
 }
@@ -407,7 +438,7 @@ main {
     font-size: 0.9rem;
   }
 
-  .phpinfo-modern table td:first-child {
+  .phpinfo-modern table td:first-child:not(:last-child) {
     white-space: normal;
     overflow-wrap: anywhere;
     word-break: break-word;
@@ -420,7 +451,7 @@ main {
     line-height: 1.45;
   }
 
-  .phpinfo-modern table tbody td:first-child {
+  .phpinfo-modern table tbody td:first-child:not(:last-child) {
     color: var(--accent);
     font-weight: 600;
     text-transform: uppercase;
