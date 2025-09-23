@@ -12,7 +12,7 @@
   --hover-highlight: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
   --table-border: rgba(12, 42, 55, 0.12);
   --table-divider: rgba(12, 42, 55, 0.06);
-  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
 }
 
 * {
@@ -128,6 +128,29 @@ main {
   color: var(--accent);
 }
 
+.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type {
+  margin: 0 auto 2rem;
+  max-width: clamp(360px, 70%, 520px);
+  text-align: center;
+}
+
+.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td {
+  text-align: center;
+}
+
+.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td h1,
+.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type td h2 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  margin: 0.75rem 0 0;
+}
+
+.phpinfo-modern .phpinfo-section:first-of-type > table:first-of-type img {
+  display: block;
+  margin: 0 auto 1rem;
+  max-width: clamp(80px, 18vw, 120px);
+  height: auto;
+}
+
 .phpinfo-modern table tbody tr:last-child td {
   border-bottom: none;
 }
@@ -143,7 +166,7 @@ main {
 
 .phpinfo-modern pre,
 .phpinfo-modern code {
-  font-family: 'Fira Code', 'JetBrains Mono', 'SFMono-Regular', 'Menlo', monospace;
+  font-family: 'SFMono-Regular', 'Menlo', 'DejaVu Sans Mono', 'Consolas', monospace;
   background: rgba(10, 64, 102, 0.06);
   border-radius: 10px;
   padding: 0.4rem 0.6rem;

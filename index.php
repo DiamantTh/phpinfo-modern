@@ -36,21 +36,31 @@ function buildPhpInfoMarkup(): string
     $sectionOpen = false;
     $sectionIndex = 0;
 
+    $openSection = static function (?string $title) use (&$rendered, &$sectionOpen, &$sectionIndex): void {
+        if ($sectionOpen) {
+            $rendered .= '</section>';
+        }
+
+        $slug = 'phpinfo-section-' . ++$sectionIndex;
+        $rendered .= sprintf(
+            '<section class="phpinfo-section" id="%s">',
+            htmlspecialchars($slug, ENT_QUOTES)
+        );
+
+        if ($title !== null && $title !== '') {
+            $rendered .= sprintf(
+                '<h2 class="section-title">%s</h2>',
+                htmlspecialchars($title, ENT_QUOTES)
+            );
+        }
+
+        $sectionOpen = true;
+    };
+
     foreach ($parts as $part) {
         if (preg_match('%<h2[^>]*>(.*?)</h2>%is', $part, $headingMatch)) {
-            if ($sectionOpen) {
-                $rendered .= '</section>';
-            }
-
             $sectionTitle = trim(strip_tags($headingMatch[1]));
-            $slug = 'phpinfo-section-' . ++$sectionIndex;
-            $rendered .= sprintf(
-                '<section class="phpinfo-section" id="%s"><h2 class="section-title">%s</h2>',
-                htmlspecialchars($slug, ENT_QUOTES),
-                htmlspecialchars($sectionTitle, ENT_QUOTES)
-            );
-
-            $sectionOpen = true;
+            $openSection($sectionTitle);
             continue;
         }
 
@@ -59,13 +69,7 @@ function buildPhpInfoMarkup(): string
         }
 
         if (!$sectionOpen) {
-            $slug = 'phpinfo-section-' . ++$sectionIndex;
-            $rendered .= sprintf(
-                '<section class="phpinfo-section" id="%s"><h2 class="section-title">%s</h2>',
-                htmlspecialchars($slug, ENT_QUOTES),
-                htmlspecialchars('Allgemein', ENT_QUOTES)
-            );
-            $sectionOpen = true;
+            $openSection(null);
         }
 
         $rendered .= $part;
@@ -94,7 +98,6 @@ $phpinfoMarkup = buildPhpInfoMarkup();
     <meta property="og:title" content="Modernes phpinfo" />
     <meta property="og:description" content="Ein frischer Blick auf Ihre aktuelle PHP-Konfiguration. Schweben Sie über die Einträge, um Details hervorzuheben, und entdecken Sie die wichtigsten Serverinformationen in einem ruhigen Farbverlauf von Ozeanblau bis Smaragdgrün." />
     <title>Modernes phpinfo</title>
-    <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="assets/styles.css" />
     <script type="module" src="assets/app.js" defer></script>
   </head>
