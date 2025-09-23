@@ -172,7 +172,7 @@ main {
 
 .phpinfo-zend__title {
   margin: 0;
-  font-size: 1.05rem;
+  font-size: clamp(1.25rem, 2vw, 1.45rem);
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -319,7 +319,7 @@ main {
   position: sticky;
   top: clamp(1rem, 3vw, 1.5rem);
   margin: clamp(2.5rem, 4vw, 3.5rem) 0 1.5rem;
-  font-size: 1.4rem;
+  font-size: clamp(1.75rem, 2.4vw, 1.95rem);
   font-weight: 600;
   color: var(--text-primary);
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(247, 255, 253, 0.6));
@@ -383,6 +383,14 @@ main {
     border-radius: 14px;
   }
 
+  .phpinfo-modern .section-title {
+    font-size: clamp(1.4rem, 5vw, 1.6rem);
+  }
+
+  .phpinfo-zend__title {
+    font-size: clamp(1.1rem, 4.2vw, 1.3rem);
+  }
+
   .phpinfo-modern table th,
   .phpinfo-modern table td {
     padding: 0.75rem clamp(0.75rem, 4vw, 1.25rem);
@@ -405,6 +413,14 @@ main {
     padding: 0 0 0.75rem;
     font-size: 0.9rem;
     letter-spacing: 0.08em;
+  }
+
+  .phpinfo-modern .section-title {
+    font-size: clamp(1.25rem, 6vw, 1.45rem);
+  }
+
+  .phpinfo-zend__title {
+    font-size: clamp(1.05rem, 6vw, 1.2rem);
   }
 
   .phpinfo-modern table thead {
