@@ -6,61 +6,91 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  const updatePointer = (clientX: number, clientY: number) => {
-    const bounds = root.getBoundingClientRect();
-    const x = clientX - bounds.left;
-    const y = clientY - bounds.top;
+  let lastPointerPosition: { x: number; y: number } | null = null;
 
-    root.style.setProperty("--pointer-x", `${x}px`);
-    root.style.setProperty("--pointer-y", `${y}px`);
+  const activatePointer = () => {
+    if (root.dataset.pointerActive !== POINTER_OPACITY_ACTIVE) {
+      root.dataset.pointerActive = POINTER_OPACITY_ACTIVE;
+    }
+  };
+
+  const deactivatePointer = () => {
+    root.style.removeProperty("--pointer-x");
+    root.style.removeProperty("--pointer-y");
+    delete root.dataset.pointerActive;
+  };
+
+  const updatePointer = () => {
+    if (lastPointerPosition === null) {
+      return;
+    }
+
+    const bounds = root.getBoundingClientRect();
+    const { x, y } = lastPointerPosition;
+    const isPointerInside =
+      x >= bounds.left &&
+      x <= bounds.right &&
+      y >= bounds.top &&
+      y <= bounds.bottom;
+
+    if (!isPointerInside) {
+      if (root.dataset.pointerActive === POINTER_OPACITY_ACTIVE) {
+        deactivatePointer();
+      }
+      return;
+    }
+
+    root.style.setProperty("--pointer-x", `${x - bounds.left}px`);
+    root.style.setProperty("--pointer-y", `${y - bounds.top}px`);
+    activatePointer();
   };
 
   const queuePointerUpdate = (() => {
     let frame = 0;
-    return (clientX: number, clientY: number) => {
+    return () => {
       if (frame) {
         return;
       }
       frame = requestAnimationFrame(() => {
-        updatePointer(clientX, clientY);
         frame = 0;
+        updatePointer();
       });
     };
   })();
 
-  let lastPointerPosition: { x: number; y: number } | null = null;
+  const shouldHandlePointer = (event: PointerEvent) =>
+    event.isPrimary && event.pointerType !== "touch";
 
-  const pointerEnter = (event: PointerEvent) => {
-    root.dataset.pointerActive = POINTER_OPACITY_ACTIVE;
+  const handlePointerMove = (event: PointerEvent) => {
+    if (!shouldHandlePointer(event)) {
+      return;
+    }
+
     lastPointerPosition = { x: event.clientX, y: event.clientY };
-    queuePointerUpdate(event.clientX, event.clientY);
+    queuePointerUpdate();
   };
 
-  const pointerLeave = () => {
-    root.style.removeProperty("--pointer-x");
-    root.style.removeProperty("--pointer-y");
-    delete root.dataset.pointerActive;
+  const handlePointerCancel = () => {
     lastPointerPosition = null;
-  };
-
-  const pointerMove = (event: PointerEvent) => {
-    lastPointerPosition = { x: event.clientX, y: event.clientY };
-    queuePointerUpdate(event.clientX, event.clientY);
+    deactivatePointer();
   };
 
   const syncPointerToViewport = () => {
-    if (
-      lastPointerPosition === null ||
-      root.dataset.pointerActive !== POINTER_OPACITY_ACTIVE
-    ) {
+    if (lastPointerPosition === null) {
       return;
     }
-    queuePointerUpdate(lastPointerPosition.x, lastPointerPosition.y);
+    queuePointerUpdate();
   };
 
-  root.addEventListener("pointerenter", pointerEnter);
-  root.addEventListener("pointerleave", pointerLeave);
-  root.addEventListener("pointermove", pointerMove);
+  window.addEventListener("pointermove", handlePointerMove);
+  root.addEventListener("pointerover", handlePointerMove);
+  window.addEventListener("pointercancel", handlePointerCancel);
+  window.addEventListener("pointerout", (event) => {
+    if (event.relatedTarget === null) {
+      handlePointerCancel();
+    }
+  });
+  window.addEventListener("blur", handlePointerCancel);
 
   window.addEventListener("scroll", syncPointerToViewport, { passive: true });
   window.addEventListener("resize", syncPointerToViewport);
