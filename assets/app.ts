@@ -1,10 +1,33 @@
 const POINTER_OPACITY_ACTIVE = "true";
+const LIGHT_GLOW_CLASS = "phpinfo-modern--light-glow";
 
 document.addEventListener("DOMContentLoaded", () => {
   const root = document.querySelector<HTMLDivElement>("[data-phpinfo-root]");
   if (!root) {
     return;
   }
+
+  const pointerMedia = window.matchMedia?.("(pointer: fine)") ?? null;
+  const reducedMotionMedia = window.matchMedia?.(
+    "(prefers-reduced-motion: reduce)"
+  ) ?? null;
+
+  const hasWebGLSupport = (() => {
+    try {
+      const canvas = document.createElement("canvas");
+      return !!(
+        canvas.getContext("webgl") || canvas.getContext("experimental-webgl")
+      );
+    } catch (_error) {
+      return false;
+    }
+  })();
+
+  const shouldUseLightGlow = () => {
+    const prefersReducedMotion = reducedMotionMedia?.matches ?? false;
+    const hasFinePointer = pointerMedia?.matches ?? true;
+    return prefersReducedMotion || !hasFinePointer || !hasWebGLSupport;
+  };
 
   let lastPointerPosition: { x: number; y: number } | null = null;
 
@@ -58,6 +81,27 @@ document.addEventListener("DOMContentLoaded", () => {
     };
   })();
 
+  const applyGlowPreference = () => {
+    root.classList.toggle(LIGHT_GLOW_CLASS, shouldUseLightGlow());
+  };
+
+  const observeMediaQuery = (media: MediaQueryList | null) => {
+    if (!media) {
+      return;
+    }
+
+    const handler = () => {
+      applyGlowPreference();
+      queuePointerUpdate();
+    };
+
+    if ("addEventListener" in media) {
+      media.addEventListener("change", handler);
+    } else if ("addListener" in media) {
+      media.addListener(handler);
+    }
+  };
+
   const shouldHandlePointer = (event: PointerEvent) =>
     event.isPrimary && event.pointerType !== "touch";
 
@@ -84,9 +128,24 @@ document.addEventListener("DOMContentLoaded", () => {
 
   window.addEventListener("pointermove", handlePointerMove);
   root.addEventListener("pointerover", handlePointerMove);
+  applyGlowPreference();
+  observeMediaQuery(pointerMedia);
+  observeMediaQuery(reducedMotionMedia);
+  const pointerLeftViewport = (event: PointerEvent) => {
+    const { clientX, clientY } = event;
+    const { innerWidth, innerHeight } = window;
+
+    return (
+      clientX <= 0 ||
+      clientX >= innerWidth ||
+      clientY <= 0 ||
+      clientY >= innerHeight
+    );
+  };
+
   window.addEventListener("pointercancel", handlePointerCancel);
   window.addEventListener("pointerout", (event) => {
-    if (event.relatedTarget === null) {
+    if (!event.relatedTarget && pointerLeftViewport(event)) {
       handlePointerCancel();
     }
   });

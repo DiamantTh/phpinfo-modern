@@ -223,6 +223,19 @@ main {
   opacity: 0.6;
 }
 
+.phpinfo-modern--light-glow .phpinfo-modern__surface::before {
+  mix-blend-mode: normal;
+  background: radial-gradient(
+      220px 220px at var(--pointer-x, 50%) var(--pointer-y, 50%),
+      rgba(255, 255, 255, 0.35),
+      transparent 70%
+    );
+}
+
+.phpinfo-modern--light-glow[data-pointer-active="true"] .phpinfo-modern__surface::before {
+  opacity: 0.45;
+}
+
 .phpinfo-modern table {
   width: 100%;
   border-collapse: collapse;
