@@ -4,37 +4,52 @@ document.addEventListener("DOMContentLoaded", () => {
   if (!root) {
     return;
   }
-  const updatePointer = (event) => {
+  const updatePointer = (clientX, clientY) => {
     const bounds = root.getBoundingClientRect();
-    const x = event.clientX - bounds.left;
-    const y = event.clientY - bounds.top;
+    const x = clientX - bounds.left;
+    const y = clientY - bounds.top;
     root.style.setProperty("--pointer-x", `${x}px`);
     root.style.setProperty("--pointer-y", `${y}px`);
   };
+  const queuePointerUpdate = (() => {
+    let frame = 0;
+    return (clientX, clientY) => {
+      if (frame) {
+        return;
+      }
+      frame = requestAnimationFrame(() => {
+        updatePointer(clientX, clientY);
+        frame = 0;
+      });
+    };
+  })();
+  let lastPointerPosition = null;
   const pointerEnter = (event) => {
     root.dataset.pointerActive = POINTER_OPACITY_ACTIVE;
-    updatePointer(event);
+    lastPointerPosition = { x: event.clientX, y: event.clientY };
+    queuePointerUpdate(event.clientX, event.clientY);
   };
   const pointerLeave = () => {
     root.style.removeProperty("--pointer-x");
     root.style.removeProperty("--pointer-y");
     delete root.dataset.pointerActive;
+    lastPointerPosition = null;
   };
-  const throttledPointerMove = (() => {
-    let frame = 0;
-    return (event) => {
-      if (frame) {
-        return;
-      }
-      frame = requestAnimationFrame(() => {
-        updatePointer(event);
-        frame = 0;
-      });
-    };
-  })();
+  const pointerMove = (event) => {
+    lastPointerPosition = { x: event.clientX, y: event.clientY };
+    queuePointerUpdate(event.clientX, event.clientY);
+  };
+  const syncPointerToViewport = () => {
+    if (lastPointerPosition === null || root.dataset.pointerActive !== POINTER_OPACITY_ACTIVE) {
+      return;
+    }
+    queuePointerUpdate(lastPointerPosition.x, lastPointerPosition.y);
+  };
   root.addEventListener("pointerenter", pointerEnter);
   root.addEventListener("pointerleave", pointerLeave);
-  root.addEventListener("pointermove", throttledPointerMove);
+  root.addEventListener("pointermove", pointerMove);
+  window.addEventListener("scroll", syncPointerToViewport, { passive: true });
+  window.addEventListener("resize", syncPointerToViewport);
   const rows = root.querySelectorAll("table tbody tr");
   rows.forEach((row) => {
     row.addEventListener("mouseenter", () => {
