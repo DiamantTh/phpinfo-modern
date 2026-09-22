@@ -192,9 +192,12 @@ function buildPhpInfoMarkup(): string
             $rendered .= $introMarkup;
         }
 
-        // The intro card already displays the current PHP version, so the
-        // first phpinfo heading would only repeat the same information.
-        if ($sectionIndex !== 1 && $title !== null && $title !== '') {
+        // phpinfo emits markup before its first heading, so the section index
+        // is not reliable here. The intro card already shows this version.
+        $isDuplicateVersionTitle = $title !== null
+            && preg_match('/^PHP Version\b/i', $title) === 1;
+
+        if ($title !== null && $title !== '' && !$isDuplicateVersionTitle) {
             $rendered .= sprintf(
                 '<h2 class="section-title">%s</h2>',
                 htmlspecialchars($title, ENT_QUOTES)
