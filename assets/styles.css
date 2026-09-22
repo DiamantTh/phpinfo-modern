@@ -1,20 +1,20 @@
 :root {
-  --bg-start: #d9edff;
-  --bg-mid: #c9f0f5;
-  --bg-end: #c5f8d8;
-  --card-bg: rgba(255, 255, 255, 0.72);
-  --card-border: rgba(255, 255, 255, 0.6);
-  --card-shadow: rgba(0, 45, 85, 0.2);
-  --text-primary: #0c2a37;
-  --text-secondary: rgba(12, 42, 55, 0.7);
-  --accent: #3aa0a4;
-  --table-label: #647b87;
-  --accent-soft: rgba(58, 160, 164, 0.12);
-  --hover-highlight: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
-  --table-border: rgba(12, 42, 55, 0.12);
-  --table-divider: rgba(12, 42, 55, 0.06);
-  --badge-bg: rgba(58, 160, 164, 0.16);
-  --badge-border: rgba(58, 160, 164, 0.32);
+  --bg-start: #f7f8fa;
+  --bg-mid: #eef1f5;
+  --bg-end: #d7dde6;
+  --card-bg: rgba(247, 248, 250, 0.78);
+  --card-border: rgba(255, 255, 255, 0.82);
+  --card-shadow: rgba(32, 40, 51, 0.16);
+  --text-primary: #202833;
+  --text-secondary: #4b5f7a;
+  --accent: #4b5f7a;
+  --table-label: #5d7088;
+  --accent-soft: rgba(75, 95, 122, 0.12);
+  --hover-highlight: linear-gradient(90deg, rgba(215, 221, 230, 0.9), rgba(247, 248, 250, 0.96));
+  --table-border: rgba(75, 95, 122, 0.16);
+  --table-divider: rgba(75, 95, 122, 0.1);
+  --badge-bg: rgba(142, 160, 183, 0.2);
+  --badge-border: rgba(75, 95, 122, 0.28);
   font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
 }
 
@@ -44,7 +44,7 @@ main {
   background: var(--card-bg);
   border-radius: 28px;
   border: 1px solid var(--card-border);
-  box-shadow: 0 24px 80px -40px var(--card-shadow), 0 12px 40px -24px rgba(10, 64, 102, 0.18);
+  box-shadow: 0 24px 80px -40px var(--card-shadow), 0 12px 40px -24px rgba(32, 40, 51, 0.16);
   backdrop-filter: blur(14px) saturate(140%);
   overflow: visible;
   padding: clamp(2rem, 4vw, 3rem) clamp(1.5rem, 4vw, 3rem);
@@ -63,7 +63,7 @@ main {
   inset: 0;
   z-index: 0;
   border-radius: inherit;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.38) 0%, rgba(255, 255, 255, 0.2) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.42) 0%, rgba(215, 221, 230, 0.25) 100%);
   pointer-events: none;
 }
 
@@ -81,9 +81,9 @@ main {
   margin: 0 auto clamp(2rem, 4vw, 3rem);
   padding: clamp(1.75rem, 4vw, 2.75rem) clamp(1.75rem, 4vw, 2.85rem);
   border-radius: 28px;
-  border: 1px solid rgba(255, 255, 255, 0.7);
-  background: rgba(255, 255, 255, 0.88);
-  box-shadow: 0 24px 64px -42px rgba(10, 64, 102, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.86);
+  background: rgba(247, 248, 250, 0.9);
+  box-shadow: 0 24px 64px -42px rgba(32, 40, 51, 0.34);
   backdrop-filter: blur(18px) saturate(140%);
   display: grid;
   gap: clamp(1.5rem, 3vw, 2rem);
@@ -116,7 +116,7 @@ main {
   font-weight: 600;
   font-size: 0.95rem;
   letter-spacing: 0.04em;
-  box-shadow: 0 14px 38px -28px rgba(10, 64, 102, 0.4);
+  box-shadow: 0 14px 38px -28px rgba(32, 40, 51, 0.32);
 }
 
 .phpinfo-logo {
@@ -131,14 +131,14 @@ main {
   height: clamp(82px, 15vw, 120px);
   border-radius: 52% / 65%;
   background: radial-gradient(120% 140% at 18% 20%, rgba(255, 255, 255, 0.45), transparent 55%),
-    linear-gradient(135deg, #b7c2ff 0%, #5661ad 38%, #393f7d 100%);
-  box-shadow: 0 28px 64px -40px rgba(10, 64, 102, 0.55), inset 0 0 12px rgba(255, 255, 255, 0.25);
+    linear-gradient(135deg, #8ea0b7 0%, #4b5f7a 48%, #202833 100%);
+  box-shadow: 0 28px 64px -40px rgba(32, 40, 51, 0.5), inset 0 0 12px rgba(255, 255, 255, 0.25);
   padding: clamp(0.35rem, 1.5vw, 0.65rem);
 }
 
 .phpinfo-logo--php[data-has-image="true"] {
-  background: rgba(255, 255, 255, 0.9);
-  box-shadow: 0 18px 44px -32px rgba(10, 64, 102, 0.5);
+  background: rgba(247, 248, 250, 0.92);
+  box-shadow: 0 18px 44px -32px rgba(32, 40, 51, 0.42);
   border-radius: 26px;
 }
 
@@ -146,7 +146,7 @@ main {
   display: block;
   max-width: clamp(120px, 24vw, 200px);
   height: auto;
-  filter: drop-shadow(0 12px 32px rgba(10, 64, 102, 0.35));
+  filter: drop-shadow(0 12px 32px rgba(32, 40, 51, 0.3));
 }
 
 .phpinfo-logo__placeholder {
@@ -162,9 +162,9 @@ main {
   margin: clamp(2rem, 4vw, 3rem) auto clamp(1.5rem, 3vw, 2.75rem);
   padding: clamp(1.5rem, 3vw, 2.25rem) clamp(1.5rem, 3vw, 2.75rem);
   border-radius: 24px;
-  border: 1px solid rgba(58, 160, 164, 0.1);
-  background: rgba(255, 255, 255, 0.82);
-  box-shadow: 0 24px 54px -36px rgba(10, 64, 102, 0.4);
+  border: 1px solid rgba(75, 95, 122, 0.14);
+  background: rgba(247, 248, 250, 0.86);
+  box-shadow: 0 24px 54px -36px rgba(32, 40, 51, 0.34);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -200,7 +200,7 @@ main {
   width: clamp(140px, 22vw, 220px);
   max-width: 100%;
   height: auto;
-  filter: drop-shadow(0 12px 28px rgba(10, 64, 102, 0.25));
+  filter: drop-shadow(0 12px 28px rgba(32, 40, 51, 0.22));
 }
 
 .phpinfo-zend__body {
@@ -250,9 +250,9 @@ main {
   width: 100%;
   border-collapse: collapse;
   margin: 1.5rem 0;
-  background: rgba(255, 255, 255, 0.75);
+  background: rgba(247, 248, 250, 0.78);
   border: 1px solid var(--table-border);
-  box-shadow: 0 18px 40px -32px rgba(12, 42, 55, 0.4);
+  box-shadow: 0 18px 40px -32px rgba(32, 40, 51, 0.32);
   border-radius: 18px;
 }
 
@@ -303,7 +303,7 @@ main {
 .phpinfo-modern table tbody tr:hover {
   background: var(--hover-highlight);
   transform: translate3d(0, -1px, 0);
-  box-shadow: 0 12px 32px -24px rgba(12, 42, 55, 0.45);
+  box-shadow: 0 12px 32px -24px rgba(32, 40, 51, 0.34);
 }
 
 .phpinfo-modern table tbody tr.is-hovered td:first-child:not(:last-child),
@@ -327,7 +327,7 @@ main {
 .phpinfo-modern pre,
 .phpinfo-modern code {
   font-family: 'SFMono-Regular', 'Menlo', 'DejaVu Sans Mono', 'Consolas', monospace;
-  background: rgba(10, 64, 102, 0.06);
+  background: rgba(142, 160, 183, 0.16);
   border-radius: 10px;
   padding: 0.4rem 0.6rem;
   overflow-wrap: anywhere;
@@ -346,24 +346,24 @@ main {
   font-size: clamp(1.75rem, 2.4vw, 1.95rem);
   font-weight: 600;
   color: var(--text-primary);
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.8), rgba(247, 255, 253, 0.6));
+  background: linear-gradient(135deg, rgba(247, 248, 250, 0.92), rgba(215, 221, 230, 0.68));
   padding: 0.6rem 1rem;
   border-radius: 12px;
-  box-shadow: 0 12px 24px -18px rgba(12, 42, 55, 0.3);
+  box-shadow: 0 12px 24px -18px rgba(32, 40, 51, 0.28);
   z-index: 2;
 }
 
 .phpinfo-modern details {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(247, 248, 250, 0.92);
   border-radius: 16px;
-  border: 1px solid rgba(12, 42, 55, 0.08);
+  border: 1px solid rgba(75, 95, 122, 0.12);
   padding: 1rem 1.5rem;
   margin-bottom: 1.25rem;
   transition: box-shadow 200ms ease;
 }
 
 .phpinfo-modern details[open] {
-  box-shadow: 0 20px 40px -28px rgba(12, 42, 55, 0.35);
+  box-shadow: 0 20px 40px -28px rgba(32, 40, 51, 0.3);
 }
 
 .phpinfo-modern summary {
@@ -463,11 +463,11 @@ main {
   .phpinfo-modern table tbody tr {
     display: grid;
     gap: 0.5rem;
-    background: rgba(255, 255, 255, 0.88);
-    border: 1px solid rgba(12, 42, 55, 0.08);
+    background: rgba(247, 248, 250, 0.92);
+    border: 1px solid rgba(75, 95, 122, 0.12);
     border-radius: 16px;
     padding: clamp(0.85rem, 5vw, 1.2rem);
-    box-shadow: 0 6px 18px -14px rgba(12, 42, 55, 0.25);
+    box-shadow: 0 6px 18px -14px rgba(32, 40, 51, 0.22);
     transition: background 160ms ease;
   }
 
@@ -501,8 +501,8 @@ main {
 
   .phpinfo-modern table tbody tr.is-hovered,
   .phpinfo-modern table tbody tr:hover {
-    background: rgba(255, 255, 255, 0.94);
-    box-shadow: 0 6px 18px -14px rgba(12, 42, 55, 0.25);
+    background: rgba(247, 248, 250, 0.98);
+    box-shadow: 0 6px 18px -14px rgba(32, 40, 51, 0.22);
     transform: none;
   }
 

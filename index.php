@@ -251,8 +251,8 @@ $scriptVersion = (string) (filemtime(__DIR__ . '/assets/app.js') ?: 0);
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Ein frischer Blick auf Ihre aktuelle PHP-Konfiguration. Schweben Sie über die Einträge, um Details hervorzuheben, und entdecken Sie die wichtigsten Serverinformationen in einem ruhigen Farbverlauf von Ozeanblau bis Smaragdgrün." />
     <meta name="application-name" content="Modernes phpinfo" />
-    <meta name="theme-color" content="#d9edff" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0c2a37" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#f7f8fa" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#202833" media="(prefers-color-scheme: dark)" />
     <meta name="color-scheme" content="light" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Modernes phpinfo" />
