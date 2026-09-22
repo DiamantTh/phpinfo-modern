@@ -9,6 +9,11 @@
   --text-secondary: #4b5f7a;
   --accent: #4b5f7a;
   --table-label: #5d7088;
+  --glacier-ice: #cfe8f5;
+  --glacier-blue: #2f6f98;
+  --pine: #6f7b4f;
+  --amber: #a86d3e;
+  --amber-soft: #e7d2b0;
   --accent-soft: rgba(75, 95, 122, 0.12);
   --hover-highlight: linear-gradient(90deg, rgba(215, 221, 230, 0.9), rgba(247, 248, 250, 0.96));
   --table-border: rgba(75, 95, 122, 0.16);
@@ -28,7 +33,10 @@ body {
   min-height: 100%;
   color: var(--text-primary);
   text-rendering: optimizeLegibility;
-  background: linear-gradient(180deg, var(--bg-start) 0%, var(--bg-mid) 40%, var(--bg-end) 100%);
+  background:
+    radial-gradient(circle at 8% 8%, var(--glacier-ice), transparent 31%),
+    radial-gradient(circle at 92% 92%, var(--amber-soft), transparent 33%),
+    linear-gradient(180deg, var(--bg-start) 0%, var(--bg-mid) 44%, var(--bg-end) 100%);
 }
 
 body {
@@ -119,6 +127,12 @@ main {
   box-shadow: 0 14px 38px -28px rgba(32, 40, 51, 0.32);
 }
 
+.phpinfo-badge:last-child {
+  background: rgba(231, 210, 176, 0.38);
+  border-color: rgba(168, 109, 62, 0.34);
+  color: var(--amber);
+}
+
 .phpinfo-logo {
   display: grid;
   place-items: center;
@@ -186,7 +200,7 @@ main {
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--accent);
+  color: var(--pine);
 }
 
 .phpinfo-zend__brand {
@@ -262,7 +276,7 @@ main {
   padding: 1.25rem clamp(1.25rem, 2vw, 1.75rem) 0;
   font-size: 1rem;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--glacier-blue);
   text-transform: uppercase;
   letter-spacing: 0.12em;
 }
@@ -276,7 +290,7 @@ main {
 }
 
 .phpinfo-modern table th {
-  color: var(--accent);
+  color: var(--glacier-blue);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -301,14 +315,14 @@ main {
 
 .phpinfo-modern table tbody tr.is-hovered,
 .phpinfo-modern table tbody tr:hover {
-  background: var(--hover-highlight);
+  background: linear-gradient(90deg, var(--glacier-ice), rgba(247, 248, 250, 0.96));
   transform: translate3d(0, -1px, 0);
   box-shadow: 0 12px 32px -24px rgba(32, 40, 51, 0.34);
 }
 
 .phpinfo-modern table tbody tr.is-hovered td:first-child:not(:last-child),
 .phpinfo-modern table tbody tr:hover td:first-child:not(:last-child) {
-  color: var(--accent);
+  color: var(--glacier-blue);
 }
 
 .phpinfo-modern table tbody tr:last-child td {
@@ -349,6 +363,7 @@ main {
   background: linear-gradient(135deg, rgba(247, 248, 250, 0.92), rgba(215, 221, 230, 0.68));
   padding: 0.6rem 1rem;
   border-radius: 12px;
+  border-left: 4px solid var(--glacier-blue);
   box-shadow: 0 12px 24px -18px rgba(32, 40, 51, 0.28);
   z-index: 2;
 }
@@ -356,7 +371,7 @@ main {
 .phpinfo-modern details {
   background: rgba(247, 248, 250, 0.92);
   border-radius: 16px;
-  border: 1px solid rgba(75, 95, 122, 0.12);
+  border: 1px solid rgba(111, 123, 79, 0.2);
   padding: 1rem 1.5rem;
   margin-bottom: 1.25rem;
   transition: box-shadow 200ms ease;
@@ -369,14 +384,24 @@ main {
 .phpinfo-modern summary {
   cursor: pointer;
   font-weight: 600;
-  color: var(--accent);
+  color: var(--pine);
   display: flex;
   align-items: center;
   gap: 0.6rem;
 }
 
 .phpinfo-modern summary::marker {
-  color: var(--accent);
+  color: var(--pine);
+}
+
+.phpinfo-modern a {
+  color: var(--glacier-blue);
+  text-decoration-color: rgba(47, 111, 152, 0.45);
+}
+
+.phpinfo-modern a:hover {
+  color: var(--amber);
+  text-decoration-color: currentColor;
 }
 
 @media (max-width: 768px) {
