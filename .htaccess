@@ -13,9 +13,10 @@ RewriteEngine On
 # Serve the application at the directory URL as well as via /index.php.
 RewriteRule ^$ index.php [END]
 
-# The page needs these two generated browser assets. Everything else,
-# including source, documentation, and hidden files, is denied.
-RewriteRule ^(?:index\.php|assets/(?:styles\.css|app\.js))$ - [END]
+# The page needs these two generated browser assets. Check the original URI,
+# rather than the directory-relative rewrite path, so the assets also remain
+# reachable during Apache's per-directory rewrite processing.
+RewriteCond %{REQUEST_URI} !^/(?:index\.php|assets/(?:styles\.css|app\.js))$
 RewriteRule ^ - [F,END]
 
 # Do not expose dotfiles even if URL rewriting is unavailable or overridden.
