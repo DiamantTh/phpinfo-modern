@@ -1,0 +1,24 @@
+# Public entrypoint whitelist for an Apache document root.
+# PHP filesystem permissions are not affected by these HTTP access rules.
+Options -Indexes -MultiViews
+DirectoryIndex index.php
+
+<IfModule !mod_rewrite.c>
+    # A missing rewrite module must not accidentally expose project files.
+    Require all denied
+</IfModule>
+
+RewriteEngine On
+
+# Serve the application at the directory URL as well as via /index.php.
+RewriteRule ^$ index.php [END]
+
+# The page needs these two generated browser assets. Everything else,
+# including source, documentation, and hidden files, is denied.
+RewriteRule ^(?:index\.php|assets/(?:styles\.css|app\.js))$ - [END]
+RewriteRule ^ - [F,END]
+
+# Do not expose dotfiles even if URL rewriting is unavailable or overridden.
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
