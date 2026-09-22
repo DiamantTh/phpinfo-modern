@@ -8,6 +8,7 @@
   --text-primary: #0c2a37;
   --text-secondary: rgba(12, 42, 55, 0.7);
   --accent: #3aa0a4;
+  --table-label: #647b87;
   --accent-soft: rgba(58, 160, 164, 0.12);
   --hover-highlight: linear-gradient(90deg, rgba(58, 160, 164, 0.16), rgba(197, 248, 216, 0.38));
   --table-border: rgba(12, 42, 55, 0.12);
@@ -287,61 +288,6 @@ main {
   word-break: break-word;
 }
 
-.phpinfo-modern table .is-copyable {
-  cursor: copy;
-  position: relative;
-  user-select: text;
-  -moz-user-select: text;
-}
-
-.phpinfo-modern table .is-copyable::after {
-  content: "Kopieren";
-  position: absolute;
-  right: 0.6rem;
-  top: 50%;
-  transform: translateY(-50%);
-  padding: 0.2rem 0.45rem;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 2px 10px -6px rgba(12, 42, 55, 0.75);
-  color: var(--accent);
-  font-size: 0.68rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 160ms ease;
-}
-
-.phpinfo-modern table .is-copyable:hover::after,
-.phpinfo-modern table .is-copyable:focus-visible::after,
-.phpinfo-modern table .is-copyable[data-copy-state]::after {
-  opacity: 1;
-}
-
-.phpinfo-modern table .is-copyable[data-copy-state="copied"]::after {
-  content: "Kopiert";
-}
-
-.phpinfo-modern table .is-copyable[data-copy-state="failed"]::after {
-  content: "Nicht kopiert";
-}
-
-.phpinfo-modern table .is-copyable:focus-visible {
-  outline: 3px solid rgba(58, 160, 164, 0.55);
-  outline-offset: -3px;
-}
-
-.phpinfo-copy-status {
-  position: fixed;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .phpinfo-modern table td:first-child:not(:last-child) {
   overflow-wrap: normal;
   word-break: normal;
@@ -374,7 +320,7 @@ main {
 }
 
 .phpinfo-modern table tbody td:first-child:not(:last-child) {
-  color: var(--text-primary);
+  color: var(--table-label);
   font-weight: 600;
 }
 
@@ -551,12 +497,6 @@ main {
     text-transform: uppercase;
     letter-spacing: 0.08em;
     font-size: 0.78rem;
-  }
-
-  .phpinfo-modern table .is-copyable::after {
-    top: 0.65rem;
-    right: 0.65rem;
-    transform: none;
   }
 
   .phpinfo-modern table tbody tr.is-hovered,

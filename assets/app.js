@@ -1,7 +1,6 @@
 "use strict";
 const POINTER_OPACITY_ACTIVE = "true";
 const LIGHT_GLOW_CLASS = "phpinfo-modern--light-glow";
-const COPY_RESET_DELAY = 1800;
 document.addEventListener("DOMContentLoaded", () => {
     const root = document.querySelector("[data-phpinfo-root]");
     if (!root) {
@@ -132,84 +131,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
         row.addEventListener("mouseleave", () => {
             row.classList.remove("is-hovered");
-        });
-    });
-    const copyStatus = document.createElement("p");
-    copyStatus.className = "phpinfo-copy-status";
-    copyStatus.setAttribute("aria-live", "polite");
-    copyStatus.setAttribute("aria-atomic", "true");
-    root.append(copyStatus);
-    const copyText = async (value) => {
-        if (navigator.clipboard?.writeText && window.isSecureContext) {
-            try {
-                await navigator.clipboard.writeText(value);
-                return true;
-            }
-            catch (_error) {
-                // The selection-based fallback also works on local HTTP development servers.
-            }
-        }
-        const textarea = document.createElement("textarea");
-        textarea.value = value;
-        textarea.setAttribute("readonly", "");
-        textarea.style.cssText = "position:fixed; opacity:0; pointer-events:none;";
-        document.body.append(textarea);
-        textarea.select();
-        try {
-            return document.execCommand("copy");
-        }
-        catch (_error) {
-            return false;
-        }
-        finally {
-            textarea.remove();
-        }
-    };
-    const hasTextSelection = () => {
-        const selection = window.getSelection();
-        return selection !== null && !selection.isCollapsed && selection.toString().trim() !== "";
-    };
-    const copyCellValue = async (cell) => {
-        const value = cell.innerText.trim();
-        if (value === "") {
-            return;
-        }
-        const copied = await copyText(value);
-        cell.dataset.copyState = copied ? "copied" : "failed";
-        copyStatus.textContent = copied ? "Inhalt kopiert." : "Kopieren war nicht möglich.";
-        window.setTimeout(() => {
-            delete cell.dataset.copyState;
-        }, COPY_RESET_DELAY);
-    };
-    const copyableCells = root.querySelectorAll("table td, table th");
-    copyableCells.forEach((cell) => {
-        if (cell.innerText.trim() === "") {
-            return;
-        }
-        const containsInteractiveElement = cell.querySelector("a, button, input, select, textarea") !== null;
-        cell.classList.add("is-copyable");
-        cell.title = "Klicken, um den Inhalt zu kopieren";
-        if (!containsInteractiveElement) {
-            cell.tabIndex = 0;
-            cell.setAttribute("role", "button");
-            cell.setAttribute("aria-label", "Inhalt kopieren");
-        }
-        cell.addEventListener("click", (event) => {
-            const target = event.target;
-            const clickedInteractiveElement = target instanceof Element && target.closest("a, button, input, select, textarea");
-            if (!clickedInteractiveElement && !hasTextSelection()) {
-                void copyCellValue(cell);
-            }
-        });
-        cell.addEventListener("keydown", (event) => {
-            if (containsInteractiveElement) {
-                return;
-            }
-            if (event.key !== "Enter" && event.key !== " ") {
-                return;
-            }
-            event.preventDefault();
-            void copyCellValue(cell);
         });
     });
     const observer = new IntersectionObserver((entries) => {
