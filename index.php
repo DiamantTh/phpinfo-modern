@@ -192,7 +192,9 @@ function buildPhpInfoMarkup(): string
             $rendered .= $introMarkup;
         }
 
-        if ($title !== null && $title !== '') {
+        // The intro card already displays the current PHP version, so the
+        // first phpinfo heading would only repeat the same information.
+        if ($sectionIndex !== 1 && $title !== null && $title !== '') {
             $rendered .= sprintf(
                 '<h2 class="section-title">%s</h2>',
                 htmlspecialchars($title, ENT_QUOTES)
